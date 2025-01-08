@@ -3,38 +3,47 @@ import json
 from dotenv import load_dotenv
 import os
 import time
+from constants import *
 
 # Load the .env file
 dotenv = load_dotenv()
 
-def make_prompt(user_message, objects, player):
+def make_prompt(user_message, objects, player, inventory):
     # Create a prompt
     prompt = f"""
-    You are a cooking assisstant in charge of picking and dropping ingredients at various places in a 15x15 map.
+    You are an assisstant in charge of picking and dropping ingredients at various places in a {NB_TILES}x{NB_TILES} map. YOU CAN'T EXIT THE MAP.
     Those are some tips for the game:
-    1/ The map is composed of cells on an orthogonal grid. Each cell can be occupied only by one agent, target or obstacle.
+    1/ The map is composed of cells on an orthogonal grid. Each cell can be occupied by you, a fruit or nothing.
     2/ The bottom left corner of the map is the position (0,0). The x-axis is horizontal and the y-axis is vertical.
+    3/ When it is asked you to take all the fruits, you should pick all the fruits on the map. If there is 19 take 19 for example.
 
     Each object will be given through a tuple of 3 elements: (name, x, y). For example, ("apple", 1, 2) means that there is an apple at position (1, 2).
     The Objects are located at the following positions:
     {objects}
     The player is located at the following x and y positions:
     {player}
+    You can also see your inventory, so you know what you have in your hands:
+    {inventory}
 
     You have access to three ACTIONS: "PICK", "DROP", "MOVE x,y".
     1/ "PICK": Pick up an object at the current position and stacks it on the player's inventory.
     2/ "DROP": Drop the last object in the stack created by the PICK action at the current position and removes it from the inventory.
     3/ "MOVE x,y": Move the player to a new position on the map. The new position is defined by the x and y coordinates.
     4/ It is IMPOSSIBLE to place multiple objects at the same place. You can't drop an object where one is already placed.
-    
+    5/ you can't move on a cell where where you already are
+
     Here is the user's message:
     {user_message}
 
     
     You should only respond in the format as described below:
     RESPONSE FORMAT:
-    THOUGHTS: Based on the information I listed above, in 50 words, do reasoning about what the next task should be.
+    THOUGHTS: Based on the information I listed above, do reasoning about what the nexts tasks should be.
     COMMAND: The next COMMAND. A COMMAND can be composed of one or multiple actions, which are defined above. You can do as many actions as you want in a COMMAND, in any order. Split every action by a single ";" and no space.
+    
+    Follow this exact format to get the best results, if the format is not respected, you'll be punished:
+    THOUGHTS: I should pick the apple at (1, 2) and drop it at (3, 4).
+    COMMAND: MOVE 1,2;PICK;MOVE 3,4;DROP
     """
     return prompt
 

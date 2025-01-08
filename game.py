@@ -14,7 +14,7 @@ class CookoBot(arcade.Window):
         """Initialisation de la fenêtre de jeu."""
         self.player = None
         self.inventory = []
-        self.objects = ['Banane', 'Pomme', 'Poire']
+        self.objects = ['Pomme']
         self.actions_stack = []
         self.items_on_map = {}
         self.path = []  # Chemin calculé
@@ -336,6 +336,7 @@ class CookoBot(arcade.Window):
             actions[action]()
         else:
             print(f"Erreur: Action {action} non valide")
+            self.execute_stack()
             return None
 
     def send_instruction(self, event=None):
@@ -351,7 +352,7 @@ class CookoBot(arcade.Window):
             action = ""
             try:
                 # Demande au LLM de produire la commande
-                prompt = make_prompt(self.text_input.text, self.items_on_map, self.player)
+                prompt = make_prompt(self.text_input.text, self.items_on_map, self.player, self.inventory)
                 answer = make_request(prompt)
                 print("--> REPONSE DU LLM\n" + answer)
                 thoughts, action = extract_thoughts_and_command(answer)
@@ -362,7 +363,7 @@ class CookoBot(arcade.Window):
                     return None
                 
                 # Update la valeur de l'entrée utilisateur par la commande extraite de la réponse du LLM
-                self.text_input.text = action
+                self.text_input.text = ""
                 llm_actions = action.split(";")
                 for llm_action in llm_actions:
                     self.actions_stack.append(llm_action)
