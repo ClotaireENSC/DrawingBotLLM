@@ -285,6 +285,7 @@ class CookoBot(arcade.Window):
         """
         # Vérifie si l'inventaire n'est pas vide
         if not self.inventory:
+            self.execute_stack()
             return None
         
         # Execute l'action

@@ -11,7 +11,7 @@ dotenv = load_dotenv()
 def make_prompt(user_message, objects, player, inventory):
     # Create a prompt
     prompt = f"""
-    You are an assisstant in charge of picking and dropping ingredients at various places in a {NB_TILES}x{NB_TILES} map. YOU CAN'T EXIT THE MAP.
+    You are an assisstant in charge of picking and dropping ingredients at various places in a {NB_TILES}x{NB_TILES} map. YOU CAN'T EXIT THE MAP. 
     Those are some tips for the game:
     1/ The map is composed of cells on an orthogonal grid. Each cell can be occupied by you, a fruit or nothing.
     2/ The bottom left corner of the map is the position (0,0). The x-axis is horizontal and the y-axis is vertical.
@@ -31,6 +31,8 @@ def make_prompt(user_message, objects, player, inventory):
     3/ "MOVE x,y": Move the player to a new position on the map. The new position is defined by the x and y coordinates.
     4/ It is IMPOSSIBLE to place multiple objects at the same place. You can't drop an object where one is already placed.
     5/ you can't move on a cell where where you already are
+    6/ you can't drop an object if your inventory is empty
+    7/ when you move x,y, x and y cant exceed the map size at all
 
     Here is the user's message:
     {user_message}
