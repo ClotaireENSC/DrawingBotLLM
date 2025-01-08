@@ -344,6 +344,7 @@ class CookoBot(arcade.Window):
                     self.path_index = 0
                 else:
                     print("Chemin non trouvé")
+                    self.execute_stack()
                     return None
 
             # Exécute l'action

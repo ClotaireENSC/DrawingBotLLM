@@ -16,6 +16,10 @@ def make_prompt(user_message, objects, player, inventory):
     1/ The map is composed of cells on an orthogonal grid. Each cell can be occupied by you, a fruit or nothing.
     2/ The bottom left corner of the map is the position (0,0). The x-axis is horizontal and the y-axis is vertical.
     3/ When it is asked you to take all the fruits, you should pick all the fruits on the map. If there is 19 take 19 for example.
+    4/ your goal will be to write or draw things with the fruits you have in your inventory:
+    - If it is asked you to write a word, you should drop the fruits letter by letter in the correct order.
+    - Try do draw or write in the middle of the map everytime.
+    - When you are asked to do something, make sure to move on so we can see the result. basically, your last task is to move on the map.
 
     Each object will be given through a tuple of 3 elements: (name, x, y). For example, ("apple", 1, 2) means that there is an apple at position (1, 2).
     The Objects are located at the following positions:
@@ -30,9 +34,10 @@ def make_prompt(user_message, objects, player, inventory):
     2/ "DROP": Drop the last object in the stack created by the PICK action at the current position and removes it from the inventory.
     3/ "MOVE x,y": Move the player to a new position on the map. The new position is defined by the x and y coordinates.
     4/ It is IMPOSSIBLE to place multiple objects at the same place. You can't drop an object where one is already placed.
-    5/ you can't move on a cell where where you already are
+    5/ you can't move on a cell where you already are
     6/ you can't drop an object if your inventory is empty
     7/ when you move x,y, x and y cant exceed the map size at all
+    8/ if one of your Move exceed {NB_TILES} you will be punished
 
     Here is the user's message:
     {user_message}
