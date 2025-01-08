@@ -60,6 +60,14 @@ class CookoBot(arcade.Window):
         self.manager.add(self.action_box)
         self.manager.add(self.chat_box)
 
+    def get_inventory_objects_count(self):
+        info = {}
+        for item in self.inventory:
+            if item in info:
+                info[item] += 1
+            else:
+                info[item] = 1
+        return info
 
     def setup(self):
         """Initialisation de la carte et du personnage."""
@@ -130,8 +138,13 @@ class CookoBot(arcade.Window):
         # Afficher l'inventaire au-dessus des boutons
         arcade.draw_text(f"Inventaire ({len(self.inventory)}/{INVENTORY_SIZE})", MENU_X, INVENTORY_TITLE_Y, arcade.color.MAUVE_TAUPE, 16, font_name="Comic Sans MS")
         arcade.draw_rectangle_outline(MENU_X + MENU_WIDTH//2, INVENTORY_BOX_Y - INVENTORY_BOX_HEIGHT//2, MENU_WIDTH, INVENTORY_BOX_HEIGHT, arcade.color.MAUVE_TAUPE)
-        for i, item in enumerate(self.inventory):
-            arcade.draw_text(item, INVENTORY_TEXT_X, INVENTORY_TEXT_Y - INVENTORY_TEXT_HEIGHT*i, arcade.color.MAUVE_TAUPE, 16, font_name="Comic Sans MS")
+        
+        item_count = self.get_inventory_objects_count()
+        if not item_count:
+            arcade.draw_text("Inventaire vide", INVENTORY_TEXT_X, INVENTORY_TEXT_Y, arcade.color.MAUVE_TAUPE, 16, font_name="Comic Sans MS")
+        else:
+            for i, (item, count) in enumerate(item_count.items()):
+                arcade.draw_text(f"{item} : {count}", INVENTORY_TEXT_X, INVENTORY_TEXT_Y - INVENTORY_TEXT_HEIGHT*i, arcade.color.MAUVE_TAUPE, 16, font_name="Comic Sans MS")
 
         # Afficher le chat
         arcade.draw_text("Instruction", MENU_X, INSTRUCTION_TITLE_Y, arcade.color.MAUVE_TAUPE, 16, font_name="Comic Sans MS")
